@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const SEPOLIA_RPC = process.env.NEXT_PUBLIC_RPC_URL!;
 
-const chains = [sepolia] as const;
+const chains = [sepolia];
 
 const { connectors } = getDefaultWallets({
   appName: 'MintMuseily',
