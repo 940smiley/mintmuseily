@@ -1,5 +1,6 @@
+"use client";
 import dynamic from 'next/dynamic';
-import { useContractWrite, useAccount } from 'wagmi';
+import { useWriteContract, useAccount } from 'wagmi';
 import { useState } from 'react';
 
 // Dynamically load the ConnectButton component from RainbowKit
@@ -29,24 +30,18 @@ const contractAbi = [
 ];
 
 export default function MintPage() {
-  const { address: walletAddress } = useAccount(); // Get the connected wallet address
-  const [mintAmount, setMintAmount] = useState(1); // State for the mint amount
+  const { address: walletAddress } = useAccount();
+  const [mintAmount, setMintAmount] = useState(1);
 
-  // Hook to write to the contract
-  const { write, error, isLoading } = useContractWrite({
-    address: contractAddress, // Corrected property name
-    abi: contractAbi,
-    functionName: 'mint',
-    args: [mintAmount],
-  });
+  const { writeContract, error, isPending } = useWriteContract();
 
-  // Handle the mint button click
   const handleMint = () => {
-    if (!write) {
-      console.error('Write function is not available. Ensure the contract is configured correctly.');
-      return;
-    }
-    write(); // Call the write function to interact with the contract
+    writeContract({
+      address: contractAddress as `0x${string}`,
+      abi: contractAbi,
+      functionName: 'mint',
+      args: [mintAmount],
+    });
   };
 
   return (
@@ -60,10 +55,10 @@ export default function MintPage() {
             value={mintAmount}
             min={1}
             onChange={(e) => setMintAmount(Number(e.target.value))}
-            disabled={isLoading} // Disable input while minting
+            disabled={isPending}
           />
-          <button onClick={handleMint} disabled={isLoading}>
-            {isLoading ? 'Minting...' : 'Mint'}
+          <button onClick={handleMint} disabled={isPending}>
+            {isPending ? 'Minting...' : 'Mint'}
           </button>
           {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
         </div>
