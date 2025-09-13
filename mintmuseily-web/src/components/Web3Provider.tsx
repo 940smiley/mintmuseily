@@ -29,7 +29,9 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiConfig config={config}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+<RainbowKitProvider chains={chains}>
+  {children}
+</RainbowKitProvider>
       </WagmiConfig>
     </QueryClientProvider>
   );
