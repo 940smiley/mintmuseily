@@ -54,13 +54,24 @@ export default function MintPage() {
             type="number"
             value={mintAmount}
             min={1}
-            onChange={(e) => setMintAmount(Number(e.target.value))}
+            max={10}
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              if (val >= 1 && val <= 10) {
+                setMintAmount(val);
+              }
+            }}
             disabled={isPending}
           />
           <button onClick={handleMint} disabled={isPending}>
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {/* Sanitize error messages to avoid leaking internal details */}
+          {error && (
+            <p style={{ color: 'red' }}>
+              Error: {(error as any).shortMessage || error.message}
+            </p>
+          )}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
