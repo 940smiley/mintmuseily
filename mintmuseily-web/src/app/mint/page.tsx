@@ -1,6 +1,7 @@
 "use client";
 import dynamic from 'next/dynamic';
 import { useWriteContract, useAccount } from 'wagmi';
+import { sepolia } from 'wagmi/chains';
 import { useState } from 'react';
 
 // Dynamically load the ConnectButton component from RainbowKit
@@ -27,7 +28,7 @@ const contractAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
-];
+] as const;
 
 export default function MintPage() {
   const { address: walletAddress } = useAccount();
@@ -36,11 +37,19 @@ export default function MintPage() {
   const { writeContract, error, isPending } = useWriteContract();
 
   const handleMint = () => {
+    // Security: Client-side validation for mint amount
+    if (mintAmount <= 0 || mintAmount > 10) {
+      alert("Please enter a valid amount (1-10)");
+      return;
+    }
+
     writeContract({
       address: contractAddress as `0x${string}`,
       abi: contractAbi,
       functionName: 'mint',
-      args: [mintAmount],
+      args: [BigInt(mintAmount)],
+      account: walletAddress,
+      chain: sepolia,
     });
   };
 
@@ -54,13 +63,19 @@ export default function MintPage() {
             type="number"
             value={mintAmount}
             min={1}
+            max={10}
             onChange={(e) => setMintAmount(Number(e.target.value))}
             disabled={isPending}
           />
           <button onClick={handleMint} disabled={isPending}>
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {/* Security: Sanitize error message to avoid information leakage */}
+          {error && (
+            <p style={{ color: 'red' }}>
+              Error: {(error as any).shortMessage || 'An error occurred during minting.'}
+            </p>
+          )}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
