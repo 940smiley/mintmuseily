@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.4",
+    "@tanstack/react-query": "^5.90.21",
     "next": "13.5.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
