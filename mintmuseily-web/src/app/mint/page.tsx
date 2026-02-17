@@ -76,7 +76,7 @@ export default function MintPage() {
               {isPending ? 'Minting...' : 'Mint'}
             </button>
             {isSuccess && <p className="text-green-500 text-sm mt-2 font-medium text-center" role="status">Successfully minted!</p>}
-            {error && <p className="text-red-500 text-sm mt-2 text-center" role="alert">Error: {(error as { shortMessage?: string }).shortMessage || error.message}</p>}
+            {error && <p className="text-red-500 text-sm mt-2 text-center" role="alert">Error: {error instanceof Error ? error.message : 'Transaction failed'}</p>}
           </div>
         ) : (
           <p className="text-gray-600 dark:text-gray-400 text-center">Please connect your wallet to start minting.</p>
