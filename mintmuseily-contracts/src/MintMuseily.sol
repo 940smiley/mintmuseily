@@ -23,7 +23,7 @@ contract MintMuseily is ERC721, Ownable {
         uint256 startId = tokenId;
         tokenId += amount; // Effect before Interaction
 
-        for (uint256 i = 0; i < amount; ) {
+        for (uint256 i = 0; i < amount;) {
             _safeMint(msg.sender, startId + i); // Interaction
             unchecked {
                 i++;
