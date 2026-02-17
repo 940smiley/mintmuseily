@@ -19,12 +19,12 @@ contract MintMuseily is ERC721, Ownable {
         require(amount > 0, "Amount must be greater than 0");
         require(amount <= MAX_BATCH_SIZE, "Exceeds max batch size");
 
+        uint256 startId = tokenId;
+        tokenId += amount;
+        
         for (uint256 i = 0; i < amount; i++) {
-            uint256 currentId = tokenId;
-            // Effect: Increment tokenId before interaction
-            tokenId++;
             // Interaction: _safeMint can call external contracts
-            _safeMint(msg.sender, currentId);
+            _safeMint(msg.sender, startId + i);
         }
     }
 }
