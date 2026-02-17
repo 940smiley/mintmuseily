@@ -60,26 +60,22 @@ export default function MintPage() {
               value={mintAmount}
               min={1}
               max={10}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setMintAmount(Math.max(1, Math.min(10, value)));
-              }}
+              onChange={(e) => setMintAmount(Number(e.target.value))}
               disabled={isPending}
               className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <button
-<button
             onClick={handleMint}
             disabled={isPending}
-            aria-label={isPending ? 'Minting in progress' : 'Mint Now'}
+            aria-label={isPending ? "Minting in progress" : "Mint NFT"}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
           >
             {isPending ? 'Minting...' : 'Mint Now'}
           </button>
-{error && (
-            <p className="text-red-500 text-xs mt-2 whitespace-pre-wrap" role="alert">
-              Error: {error.message}
+          {error && (
+            <p className="text-red-500 text-xs mt-2" role="alert">
+              Error: {error.message.split('\n')[0]}
             </p>
           )}
         </div>
