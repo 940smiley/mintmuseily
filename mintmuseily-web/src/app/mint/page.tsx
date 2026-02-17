@@ -57,7 +57,7 @@ export default function MintPage() {
             max={10}
             onChange={(e) => {
               const val = Number(e.target.value);
-              if (val >= 1 && val <= 10) {
+              if (!isNaN(val) && val >= 1 && val <= 10) {
                 setMintAmount(val);
               }
             }}
