@@ -35,7 +35,7 @@ export default function MintPage() {
 
   const { writeContract, error, isPending, isSuccess } = useWriteContract();
 
-  const handleMint = () => {
+value: parseEther('0.1'), // Or fetch dynamic price
     writeContract({
       address: contractAddress as `0x${string}`,
       abi: contractAbi,
