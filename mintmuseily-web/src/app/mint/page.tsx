@@ -60,7 +60,10 @@ export default function MintPage() {
               value={mintAmount}
               min={1}
               max={10}
-              onChange={(e) => setMintAmount(Number(e.target.value))}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setMintAmount(Math.max(1, Math.min(10, value)));
+              }}
               disabled={isPending}
               className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
