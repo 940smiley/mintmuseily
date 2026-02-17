@@ -9,7 +9,7 @@ const SEPOLIA_RPC = process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.sepolia.org'
 
 const { connectors } = getDefaultWallets({
   appName: 'MintMuseily',
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'dummy',
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
 });
 
 const config = createConfig({
