@@ -24,16 +24,11 @@ const config = createConfig({
   transports: {
     [sepolia.id]: http(SEPOLIA_RPC),
   },
-  ssr: true,
-});
-
-const queryClient = new QueryClient();
-
 export function Web3Provider({ children }: { children: React.ReactNode }) {
+  const queryClient = new QueryClient();
+  
   return (
-<RainbowKitProvider chains={chains}>
-          {children}
-        </RainbowKitProvider>
+    <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
           {children}
