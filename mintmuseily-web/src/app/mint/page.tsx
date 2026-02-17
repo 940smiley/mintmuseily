@@ -37,7 +37,7 @@ export default function MintPage() {
 
   const handleMint = () => {
     // Security: Client-side validation of input
-    if (mintAmount < 1 || mintAmount > 20) {
+    if (mintAmount < 1 || mintAmount > 20 || !Number.isInteger(mintAmount)) {
       return;
     }
 
@@ -65,7 +65,7 @@ export default function MintPage() {
           />
           <button
             onClick={handleMint}
-            disabled={isPending || mintAmount < 1 || mintAmount > 20}
+            disabled={isPending || mintAmount < 1 || mintAmount > 20 || !Number.isInteger(mintAmount)}
           >
             {isPending ? 'Minting...' : 'Mint'}
           </button>
