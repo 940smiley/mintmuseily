@@ -69,13 +69,10 @@ export default function MintPage() {
             />
           </div>
           <button
-            onClick={() => {
-              if (mintAmount >= 1 && mintAmount <= 10 && Number.isInteger(mintAmount)) {
-                handleMint();
-              }
-            }}
+<button
+            onClick={handleMint}
             disabled={isPending}
-            aria-label={isPending ? "Minting in progress" : "Mint NFT"}
+            aria-label={isPending ? 'Minting in progress' : 'Mint Now'}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
           >
             {isPending ? 'Minting...' : 'Mint Now'}
