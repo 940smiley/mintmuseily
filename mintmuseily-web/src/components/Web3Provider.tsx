@@ -31,7 +31,9 @@ const queryClient = new QueryClient();
 
 export function Web3Provider({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={config}>
+<RainbowKitProvider chains={chains}>
+          {children}
+        </RainbowKitProvider>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
           {children}
