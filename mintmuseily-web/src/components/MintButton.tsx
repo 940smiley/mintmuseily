@@ -23,7 +23,7 @@ export default function MintButton() {
         abi: [], // Your contract ABI
         functionName: 'mint',
         args: [address],
-        value: parseEther('0.1'),
+        // value removed - mint function is nonpayable
       });
       setIsSuccess(true);
     } catch (err) {
