@@ -34,9 +34,8 @@ contract MintMuseily is ERC721, Ownable {
         uint256 currId = tokenId;
 
         // Effect: Update tokenId before interaction (CEI)
-        unchecked {
-            tokenId = currId + amount;
-        }
+        // Effect: Update tokenId before interaction (CEI)
+        tokenId = currId + amount;
 
         // Interaction: Mint the tokens
         for (uint256 i = 0; i < amount; i++) {
