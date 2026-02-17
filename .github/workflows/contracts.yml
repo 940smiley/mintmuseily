@@ -25,19 +25,19 @@ jobs:
 
       - name: Show Forge version
         run: |
-          forge --version
+          cd mintmuseily-contracts && forge --version
 
       - name: Run Forge fmt
         run: |
-          forge fmt --check
+          cd mintmuseily-contracts && forge fmt --check
         id: fmt
 
       - name: Run Forge build
         run: |
-          forge build --sizes
+          cd mintmuseily-contracts && forge build --sizes
         id: build
 
       - name: Run Forge tests
         run: |
-          forge test -vvv
+          cd mintmuseily-contracts && forge test -vvv
         id: test
