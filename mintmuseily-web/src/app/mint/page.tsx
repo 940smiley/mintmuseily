@@ -26,7 +26,7 @@ export default function MintPage() {
 
   const handleMint = () => {
     writeContract({
-      address: (contractAddress || '0x0') as `0x${string}`,
+      address: contractAddress as `0x${string}`,
       abi: contractAbi,
       functionName: 'mint',
       args: [BigInt(mintAmount)],
