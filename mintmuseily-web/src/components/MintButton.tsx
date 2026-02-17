@@ -10,7 +10,20 @@ export default function MintButton() {
   const handleMint = () => {
     writeContract({
       address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-      abi: [], // Your contract ABI
+      abi: [
+        {
+          name: 'mint',
+          type: 'function',
+          inputs: [
+            {
+              name: 'to',
+              type: 'address',
+            },
+          ],
+          outputs: [],
+          stateMutability: 'payable',
+        },
+      ], // Your contract ABI
       functionName: 'mint',
       args: [address],
       value: parseEther('0.1'),
