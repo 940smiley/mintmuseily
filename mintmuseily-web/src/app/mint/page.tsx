@@ -65,7 +65,7 @@ export default function MintPage() {
           />
           <button
             onClick={handleMint}
-            disabled={isPending || mintAmount < 1 || mintAmount > 20 || !Number.isInteger(mintAmount)}
+            disabled={isPending || mintAmount < 1 || mintAmount > 20}
           >
             {isPending ? 'Minting...' : 'Mint'}
           </button>
