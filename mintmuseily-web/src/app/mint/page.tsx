@@ -45,25 +45,42 @@ export default function MintPage() {
   };
 
   return (
-    <div>
-      <h1>Mint Museily</h1>
+    <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6 p-4">
+      <h1 className="text-3xl font-bold text-blue-600">Mint Museily</h1>
       <ConnectButton />
       {walletAddress ? (
-        <div>
-          <input
-            type="number"
-            value={mintAmount}
-            min={1}
-            onChange={(e) => setMintAmount(Number(e.target.value))}
+        <div className="flex flex-col gap-4 w-full max-w-xs p-6 border rounded-xl shadow-sm bg-white dark:bg-gray-800">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="mintAmount" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Amount to Mint (Max 10)
+            </label>
+            <input
+              id="mintAmount"
+              type="number"
+              value={mintAmount}
+              min={1}
+              max={10}
+              onChange={(e) => setMintAmount(Number(e.target.value))}
+              disabled={isPending}
+              className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <button
+            onClick={handleMint}
             disabled={isPending}
-          />
-          <button onClick={handleMint} disabled={isPending}>
-            {isPending ? 'Minting...' : 'Mint'}
+            aria-label={isPending ? "Minting in progress" : "Mint NFT"}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
+          >
+            {isPending ? 'Minting...' : 'Mint Now'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && (
+            <p className="text-red-500 text-xs mt-2" role="alert">
+              Error: {error.message.split('\n')[0]}
+            </p>
+          )}
         </div>
       ) : (
-        <p>Please connect your wallet to mint.</p>
+        <p className="text-gray-500">Please connect your wallet to mint.</p>
       )}
     </div>
   );
