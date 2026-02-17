@@ -20,30 +20,26 @@ export default function MintButton() {
     try {
       await writeContract({
         address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-        abi: [], // Your contract ABI
+        abi: [
+          {
+            name: 'mint',
+            type: 'function',
+            inputs: [{ name: 'amount', type: 'uint256' }],
+            outputs: [],
+            stateMutability: 'nonpayable',
+          },
+        ],
         functionName: 'mint',
-        args: [address],
-        value: parseEther('0.1'),
+        args: [BigInt(1)],
       });
       setIsSuccess(true);
+    } catch (error) {
+      console.error(error);
     } finally {
       setIsLoading(false);
-const handleMint = async () => {
-  setIsLoading(true);
-  try {
-    const mintPrice = await getMintPrice(); // Add function to fetch current price
-    await writeContract({
-      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-      abi: [], // Your contract ABI
-      functionName: 'mint',
-      args: [address],
-      value: mintPrice,
-    });
-    setIsSuccess(true);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    }
+  };
+
   return (
     <button
       onClick={handleMint}

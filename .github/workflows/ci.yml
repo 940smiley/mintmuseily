@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  contracts:
+    name: Contracts Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: Run tests
+        run: |
+          cd mintmuseily-contracts
+          forge test
+
+  web:
+    name: Web Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: 'mintmuseily-web/pnpm-lock.yaml'
+      - name: Install dependencies
+        run: |
+          cd mintmuseily-web
+          pnpm install
+      - name: Build
+        run: |
+          cd mintmuseily-web
+          NEXT_PUBLIC_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=dummy NEXT_PUBLIC_RPC_URL=https://dummy.com pnpm build
