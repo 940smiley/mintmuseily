@@ -37,7 +37,7 @@ export default function MintPage() {
 
   const handleMint = () => {
     // Security: Client-side validation of input
-    if (mintAmount < 1 || mintAmount > 20 || !Number.isInteger(mintAmount)) {
+    if (mintAmount < 1 || mintAmount > 20) {
       return;
     }
 
