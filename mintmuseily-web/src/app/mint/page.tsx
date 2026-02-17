@@ -80,9 +80,9 @@ export default function MintPage() {
           >
             {isPending ? 'Minting...' : 'Mint Now'}
           </button>
-          {error && (
-            <p className="text-red-500 text-xs mt-2" role="alert">
-              Error: {error.message.split('\n')[0]}
+{error && (
+            <p className="text-red-500 text-xs mt-2 whitespace-pre-wrap" role="alert">
+              Error: {error.message}
             </p>
           )}
         </div>
