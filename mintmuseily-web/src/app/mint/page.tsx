@@ -69,7 +69,7 @@ export default function MintPage() {
           {/* Sanitize error messages to avoid leaking internal details */}
           {error && (
             <p style={{ color: 'red' }}>
-              Error: {(error as any).shortMessage || error.message}
+              Error: {'shortMessage' in error ? (error as any).shortMessage : error.message}
             </p>
           )}
         </div>
