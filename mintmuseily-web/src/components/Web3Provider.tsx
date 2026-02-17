@@ -6,10 +6,13 @@ import { sepolia } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const SEPOLIA_RPC = process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.sepolia.org';
-
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+if (!projectId) {
+  throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID environment variable is required');
+}
 const { connectors } = getDefaultWallets({
   appName: 'MintMuseily',
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
+  projectId,
 });
 
 const config = createConfig({
