@@ -2,6 +2,7 @@
 "use client";
 import { useAccount, useWriteContract } from 'wagmi';
 import { useState, useEffect } from 'react';
+import { parseEther } from 'viem';
 
 export default function MintButton() {
   const [isSuccess, setIsSuccess] = useState(false);
