@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  contracts-check:
+    name: Contracts CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Run Forge checks
+        run: |
+          cd mintmuseily-contracts
+          forge --version
+          forge fmt --check
+          forge build --sizes
+          forge test -vvv
+        env:
+          FOUNDRY_PROFILE: ci
+
+  web-check:
+    name: Web CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: 'mintmuseily-web/pnpm-lock.yaml'
+
+      - name: Install dependencies
+        run: |
+          cd mintmuseily-web
+          pnpm install --frozen-lockfile
+
+      - name: Lint and Build
+        run: |
+          cd mintmuseily-web
+          pnpm lint
+          # Build might fail without real env vars, but let's try if it works with dummy ones like I did locally
+          NEXT_PUBLIC_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=dummy NEXT_PUBLIC_RPC_URL=https://rpc.sepolia.org pnpm build

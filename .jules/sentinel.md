@@ -1,0 +1,4 @@
+## 2026-02-11 - [Input Validation and CEI pattern in NFT Mint]
+**Vulnerability:** The `mint` function in `MintMuseily.sol` followed a non-standard pattern by calling `_safeMint` before incrementing the `tokenId`, violating the Checks-Effects-Interactions (CEI) pattern. Additionally, it lacked input validation for the mint amount, which was expected by the frontend but not implemented in the contract, potentially leading to Gas DoS if an unbounded amount was requested.
+**Learning:** Even when using secure libraries like OpenZeppelin, contract-specific logic must still adhere to security best practices like CEI to provide defense-in-depth against potential reentrancy-style callbacks.
+**Prevention:** Always increment state variables before performing external calls (including `_safeMint`). Implement reasonable limits on batch operations to prevent gas-limit related DoS. Ensure frontend and contract interfaces are synchronized and both perform validation.

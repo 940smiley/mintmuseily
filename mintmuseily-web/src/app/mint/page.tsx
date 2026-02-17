@@ -36,11 +36,16 @@ export default function MintPage() {
   const { writeContract, error, isPending } = useWriteContract();
 
   const handleMint = () => {
+    // Security: Client-side validation of input
+    if (mintAmount < 1 || mintAmount > 20 || !Number.isInteger(mintAmount)) {
+      return;
+    }
+
     writeContract({
       address: contractAddress as `0x${string}`,
       abi: contractAbi,
       functionName: 'mint',
-      args: [mintAmount],
+      args: [BigInt(mintAmount)],
     });
   };
 
@@ -54,13 +59,21 @@ export default function MintPage() {
             type="number"
             value={mintAmount}
             min={1}
+            max={20}
             onChange={(e) => setMintAmount(Number(e.target.value))}
             disabled={isPending}
           />
-          <button onClick={handleMint} disabled={isPending}>
+          <button
+            onClick={handleMint}
+            disabled={isPending || mintAmount < 1 || mintAmount > 20 || !Number.isInteger(mintAmount)}
+          >
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && (
+            <p style={{ color: 'red' }}>
+              Error: {(error as { shortMessage?: string }).shortMessage || 'An unexpected error occurred'}
+            </p>
+          )}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
