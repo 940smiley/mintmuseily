@@ -13,7 +13,7 @@ if (!contractAddress) {
   throw new Error('Contract address is not defined in environment variables.');
 }
 
-// Replace with your actual contract ABI
+// Updated ABI to include the new batch mint function
 const contractAbi = [
   {
     name: 'mint',
@@ -27,7 +27,7 @@ const contractAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
-];
+] as const;
 
 export default function MintPage() {
   const { address: walletAddress } = useAccount();
@@ -40,30 +40,40 @@ export default function MintPage() {
       address: contractAddress as `0x${string}`,
       abi: contractAbi,
       functionName: 'mint',
-      args: [mintAmount],
+      args: [BigInt(mintAmount)],
     });
   };
 
   return (
-    <div>
-      <h1>Mint Museily</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-6 bg-white text-black">
+      <h1 className="text-3xl font-bold">Mint Museily</h1>
       <ConnectButton />
       {walletAddress ? (
-        <div>
-          <input
-            type="number"
-            value={mintAmount}
-            min={1}
-            onChange={(e) => setMintAmount(Number(e.target.value))}
+        <div className="flex flex-col gap-4 items-center border p-6 rounded-lg shadow-sm">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="amount" className="text-sm font-medium">Amount to mint (max 10):</label>
+            <input
+              id="amount"
+              type="number"
+              value={mintAmount}
+              min={1}
+              max={10}
+              onChange={(e) => setMintAmount(Math.max(1, Math.min(10, Number(e.target.value))))}
+              disabled={isPending}
+              className="border p-2 rounded w-20 text-center"
+            />
+          </div>
+          <button
+            onClick={handleMint}
             disabled={isPending}
-          />
-          <button onClick={handleMint} disabled={isPending}>
+            className="bg-blue-600 text-white px-8 py-2 rounded-full font-semibold hover:bg-blue-700 disabled:bg-gray-400 transition"
+          >
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && <p className="text-red-500 text-sm">Error: {(error as any).shortMessage || error.message}</p>}
         </div>
       ) : (
-        <p>Please connect your wallet to mint.</p>
+        <p className="text-gray-500">Please connect your wallet to mint.</p>
       )}
     </div>
   );
