@@ -18,7 +18,7 @@ contract MintMuseily is ERC721, Ownable {
      */
     function mint(uint256 amount) external {
         require(amount > 0 && amount <= MAX_PER_MINT, "MintMuseily: Invalid amount");
-        require(amount <= MAX_SUPPLY - tokenId, "MintMuseily: Exceeds max supply");
+        require(tokenId + amount <= MAX_SUPPLY, "MintMuseily: Exceeds max supply");
 
         uint256 startId = tokenId;
         tokenId += amount; // Effect before Interaction
