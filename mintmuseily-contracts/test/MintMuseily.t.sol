@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
 
-import {Test, console} from "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
+import {ERC721Holder} from "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import {MintMuseily} from "../src/MintMuseily.sol";
 
-contract MintMuseilyTest is Test {
+contract MintMuseilyTest is Test, ERC721Holder {
     MintMuseily public mintMuseily;
 
     function setUp() public {
