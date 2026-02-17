@@ -47,7 +47,7 @@ export default function MintPage() {
                 onChange={(e) => setMintAmount(Math.max(1, Number(e.target.value)))}
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none transition-all" />
             </div>
-            <button onClick={handleMint} disabled={isPending}
+            <button onClick={handleMint} disabled={isPending} aria-label="Mint NFT"
               className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg disabled:opacity-50 transition-all">
               {isPending ? 'Minting...' : 'Mint Now'}
             </button>
