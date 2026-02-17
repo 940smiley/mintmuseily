@@ -22,16 +22,18 @@ export default function MintPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const { writeContract, error, isPending, isSuccess } = useWriteContract();
 
-  useEffect(() => { if (isSuccess) setShowSuccess(true); }, [isSuccess]);
-
-  const handleMint = () => {
-    writeContract({
-      address: contractAddress as `0x${string}`,
-      abi: contractAbi,
-      functionName: 'mint',
-      args: [BigInt(mintAmount)],
-    });
-  };
+const handleMint = () => {
+  if (mintAmount < 1) {
+    // Handle error appropriately (e.g., set error state)
+    return;
+  }
+  writeContract({
+    address: contractAddress as `0x${string}`,
+    abi: contractAbi,
+    functionName: 'mint',
+    args: [BigInt(mintAmount)],
+  });
+};
 
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
