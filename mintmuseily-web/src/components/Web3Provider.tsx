@@ -11,7 +11,9 @@ if (!SEPOLIA_RPC) {
   throw new Error('NEXT_PUBLIC_RPC_URL is not defined in environment variables');
 }
 
-const chains = [sepolia] as const;
+<RainbowKitProvider config={config}>
+  {children}
+</RainbowKitProvider>
 
 const { connectors } = getDefaultWallets({
   appName: 'MintMuseily',
