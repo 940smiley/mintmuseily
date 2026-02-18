@@ -1,13 +1,13 @@
 "use client";
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiConfig, createConfig, http } from 'wagmi';
+import { WagmiProvider, createConfig, http } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const SEPOLIA_RPC = process.env.NEXT_PUBLIC_RPC_URL!;
 
-const chains = [sepolia];
+const chains = [sepolia] as const;
 
 const { connectors } = getDefaultWallets({
   appName: 'MintMuseily',
@@ -27,12 +27,12 @@ const queryClient = new QueryClient();
 
 export function Web3Provider({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <WagmiConfig config={config}>
-<RainbowKitProvider chains={chains}>
-  {children}
-</RainbowKitProvider>
-      </WagmiConfig>
-    </QueryClientProvider>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          {children}
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
