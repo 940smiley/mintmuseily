@@ -49,18 +49,34 @@ export default function MintPage() {
       <h1>Mint Museily</h1>
       <ConnectButton />
       {walletAddress ? (
-        <div>
-          <input
-            type="number"
-            value={mintAmount}
-            min={1}
-            onChange={(e) => setMintAmount(Number(e.target.value))}
+        <div className="mt-4 flex flex-col gap-4 max-w-xs">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="mintAmount" className="text-sm font-medium">
+              Amount to Mint
+            </label>
+            <input
+              id="mintAmount"
+              type="number"
+              value={mintAmount}
+              min={1}
+              onChange={(e) => setMintAmount(Number(e.target.value))}
+              disabled={isPending}
+              className="border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none text-black"
+            />
+          </div>
+          <button
+            onClick={handleMint}
             disabled={isPending}
-          />
-          <button onClick={handleMint} disabled={isPending}>
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors focus:ring-2 focus:ring-blue-500 outline-none"
+            aria-label={isPending ? "Minting NFT" : "Mint NFT"}
+          >
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && (
+            <p role="alert" className="text-red-500 text-sm font-medium">
+              Error: {error.message}
+            </p>
+          )}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
