@@ -36,31 +36,47 @@ export default function MintPage() {
   const { writeContract, error, isPending } = useWriteContract();
 
   const handleMint = () => {
+    if (mintAmount < 1 || mintAmount > 10) {
+      alert('Please enter an amount between 1 and 10');
+      return;
+    }
     writeContract({
       address: contractAddress as `0x${string}`,
       abi: contractAbi,
       functionName: 'mint',
-      args: [mintAmount],
+      args: [BigInt(mintAmount)],
     });
   };
 
   return (
-    <div>
-      <h1>Mint Museily</h1>
-      <ConnectButton />
+    <div className="p-8">
+      <h1 className="text-3xl font-bold mb-4">Mint Museily</h1>
+      <div className="mb-6">
+        <ConnectButton />
+      </div>
       {walletAddress ? (
-        <div>
+        <div className="space-y-4">
           <input
             type="number"
             value={mintAmount}
             min={1}
+            max={10}
             onChange={(e) => setMintAmount(Number(e.target.value))}
             disabled={isPending}
+            className="border p-2 mr-2 rounded text-black"
           />
-          <button onClick={handleMint} disabled={isPending}>
+          <button
+            onClick={handleMint}
+            disabled={isPending}
+            className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          >
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && (
+            <p style={{ color: 'red' }} className="mt-2" role="alert">
+              Error: {(error as any).shortMessage || error.message}
+            </p>
+          )}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
