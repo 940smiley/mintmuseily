@@ -60,7 +60,11 @@ export default function MintPage() {
           <button onClick={handleMint} disabled={isPending}>
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && (
+            <p style={{ color: 'red' }} role="alert">
+              Error: {(error as any).shortMessage || 'Transaction failed. Please try again.'}
+            </p>
+          )}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
