@@ -40,7 +40,7 @@ export default function MintPage() {
       address: contractAddress as `0x${string}`,
       abi: contractAbi,
       functionName: 'mint',
-      args: [mintAmount],
+      args: [BigInt(mintAmount)],
     });
   };
 
@@ -60,7 +60,11 @@ export default function MintPage() {
           <button onClick={handleMint} disabled={isPending}>
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && (
+            <p style={{ color: 'red' }} role="alert">
+              Error: {(error as any).shortMessage || 'An unexpected error occurred. Please try again.'}
+            </p>
+          )}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
