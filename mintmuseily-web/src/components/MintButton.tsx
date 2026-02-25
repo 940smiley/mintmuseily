@@ -1,7 +1,6 @@
 // src/components/MintButton.tsx
 import { useAccount, useWriteContract } from 'wagmi';
 import { useEffect, useState } from 'react';
-import { parseEther } from 'viem';
 
 export default function MintButton() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,39 +10,28 @@ export default function MintButton() {
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => setIsSuccess(false), 3000)
+      const timer = setTimeout(() => setIsSuccess(false), 3000);
+      return () => clearTimeout(timer);
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
   const handleMint = async () => {
+    if (!address) return;
     setIsLoading(true);
     try {
-      await writeContract({
+      writeContract({
         address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-        abi: [], // Your contract ABI
+        abi: [],
         functionName: 'mint',
-        args: [address],
-        value: parseEther('0.1'),
       });
       setIsSuccess(true);
+    } catch (err) {
+      console.error(err);
     } finally {
       setIsLoading(false);
-const handleMint = async () => {
-  setIsLoading(true);
-  try {
-    const mintPrice = await getMintPrice(); // Add function to fetch current price
-    await writeContract({
-      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-      abi: [], // Your contract ABI
-      functionName: 'mint',
-      args: [address],
-      value: mintPrice,
-    });
-    setIsSuccess(true);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    }
+  };
+
   return (
     <button
       onClick={handleMint}

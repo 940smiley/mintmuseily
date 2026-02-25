@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const SEPOLIA_RPC = process.env.NEXT_PUBLIC_RPC_URL!;
 
-const chains = [sepolia];
+const chains = [sepolia] as const;
 
 const { connectors } = getDefaultWallets({
   appName: 'MintMuseily',
@@ -29,7 +29,7 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiConfig config={config}>
-<RainbowKitProvider chains={chains}>
+<RainbowKitProvider>
   {children}
 </RainbowKitProvider>
       </WagmiConfig>
