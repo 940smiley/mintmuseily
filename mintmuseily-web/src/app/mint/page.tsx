@@ -50,7 +50,11 @@ export default function MintPage() {
       <ConnectButton />
       {walletAddress ? (
         <div>
+          <label htmlFor="mintAmount" style={{ display: 'block', marginBottom: '8px' }}>
+            Number of NFTs to mint
+          </label>
           <input
+            id="mintAmount"
             type="number"
             value={mintAmount}
             min={1}
@@ -60,7 +64,7 @@ export default function MintPage() {
           <button onClick={handleMint} disabled={isPending}>
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && <p style={{ color: 'red' }}>Error: {(error as any).shortMessage || error.message}</p>}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
