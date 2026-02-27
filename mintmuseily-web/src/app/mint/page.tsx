@@ -13,8 +13,15 @@ if (!contractAddress) {
   throw new Error('Contract address is not defined in environment variables.');
 }
 
-// Replace with your actual contract ABI
+// Optimized ABI including both single and batch mint functions
 const contractAbi = [
+  {
+    name: 'mint',
+    type: 'function',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
   {
     name: 'mint',
     type: 'function',
@@ -27,7 +34,7 @@ const contractAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
-];
+] as const;
 
 export default function MintPage() {
   const { address: walletAddress } = useAccount();
@@ -36,12 +43,22 @@ export default function MintPage() {
   const { writeContract, error, isPending } = useWriteContract();
 
   const handleMint = () => {
-    writeContract({
-      address: contractAddress as `0x${string}`,
-      abi: contractAbi,
-      functionName: 'mint',
-      args: [mintAmount],
-    });
+    if (mintAmount === 1) {
+      // Use the hyper-optimized single mint fast-path
+      writeContract({
+        address: contractAddress as `0x${string}`,
+        abi: contractAbi,
+        functionName: 'mint',
+      });
+    } else {
+      // Use the batch mint function for multiple NFTs
+      writeContract({
+        address: contractAddress as `0x${string}`,
+        abi: contractAbi,
+        functionName: 'mint',
+        args: [BigInt(mintAmount)],
+      });
+    }
   };
 
   return (
@@ -50,17 +67,20 @@ export default function MintPage() {
       <ConnectButton />
       {walletAddress ? (
         <div>
+          <label htmlFor="mint-amount">Amount:</label>
           <input
+            id="mint-amount"
             type="number"
             value={mintAmount}
             min={1}
+            max={10}
             onChange={(e) => setMintAmount(Number(e.target.value))}
             disabled={isPending}
           />
           <button onClick={handleMint} disabled={isPending}>
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && <p role="alert" style={{ color: 'red' }}>Error: {error.message}</p>}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>

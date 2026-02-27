@@ -1,0 +1,3 @@
+## 2025-05-14 - Gas Optimization in Solidity via Caching and Batching
+**Learning:** Caching state variables (like `tokenId`) to local memory and using `unchecked` arithmetic for increments significantly reduces gas costs in Solidity. Furthermore, providing a parameterless fast-path for single operations alongside a batch function optimizes gas for the most common use cases while allowing efficiency for bulk actions.
+**Action:** Always check for opportunities to cache state variables in memory before loops or frequent access, and use `unchecked` for arithmetic that is guaranteed not to overflow. Implement dedicated fast-paths for single-item operations.
