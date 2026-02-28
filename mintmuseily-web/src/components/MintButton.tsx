@@ -11,9 +11,9 @@ export default function MintButton() {
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => setIsSuccess(false), 3000)
+      setTimeout(() => setIsSuccess(false), 3000);
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
   const handleMint = async () => {
     setIsLoading(true);
@@ -26,24 +26,13 @@ export default function MintButton() {
         value: parseEther('0.1'),
       });
       setIsSuccess(true);
+    } catch (error) {
+      console.error('Minting failed:', error);
     } finally {
       setIsLoading(false);
-const handleMint = async () => {
-  setIsLoading(true);
-  try {
-    const mintPrice = await getMintPrice(); // Add function to fetch current price
-    await writeContract({
-      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-      abi: [], // Your contract ABI
-      functionName: 'mint',
-      args: [address],
-      value: mintPrice,
-    });
-    setIsSuccess(true);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    }
+  };
+
   return (
     <button
       onClick={handleMint}
