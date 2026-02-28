@@ -1,10 +1,20 @@
 // src/components/SuccessModal.tsx
+import { memo } from 'react'
+
 type SuccessModalProps = {
     isOpen: boolean
     onClose: () => void
   }
   
-  export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
+/**
+ * ⚡ Bolt Optimization:
+ * SuccessModal is an expensive UI element that is only needed when a transaction completes.
+ * Wrapping it with React.memo ensures that it only re-renders when the 'isOpen' state changes,
+ * preventing layout recalculations and unnecessary re-renders while the user is interacting
+ * with other parts of the minting page.
+ * Impact: Improved frame stability during modal transitions.
+ */
+function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
     if (!isOpen) return null
   
     return (
@@ -22,3 +32,5 @@ type SuccessModalProps = {
       </div>
     )
   }
+
+export default memo(SuccessModal)
