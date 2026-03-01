@@ -1,56 +1,48 @@
 // src/components/MintButton.tsx
-import { useAccount, useWriteContract } from 'wagmi';
-import { useEffect, useState } from 'react';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useEffect } from 'react';
 import { parseEther } from 'viem';
 
-export default function MintButton() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const { address } = useAccount();
-  const { writeContract } = useWriteContract();
+// This is a placeholder ABI for the MintMuseily contract.
+const contractAbi = [
+  {
+    name: 'mint',
+    type: 'function',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'payable',
+  },
+] as const;
 
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => setIsSuccess(false), 3000)
-    }
-  }, [isSuccess])
+export default function MintButton() {
+  const { address } = useAccount();
+  const { writeContract, data: hash, isPending, error } = useWriteContract();
+
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
 
   const handleMint = async () => {
-    setIsLoading(true);
-    try {
-      await writeContract({
-        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-        abi: [], // Your contract ABI
-        functionName: 'mint',
-        args: [address],
-        value: parseEther('0.1'),
-      });
-      setIsSuccess(true);
-    } finally {
-      setIsLoading(false);
-const handleMint = async () => {
-  setIsLoading(true);
-  try {
-    const mintPrice = await getMintPrice(); // Add function to fetch current price
-    await writeContract({
+    if (!address) return;
+
+    writeContract({
       address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-      abi: [], // Your contract ABI
+      abi: contractAbi,
       functionName: 'mint',
-      args: [address],
-      value: mintPrice,
+      value: parseEther('0.1'),
     });
-    setIsSuccess(true);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
+
   return (
-    <button
-      onClick={handleMint}
-      disabled={isLoading}
-      className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg"
-    >
-      {isLoading ? 'Minting...' : isSuccess ? 'Success!' : 'Mint'}
-    </button>
+    <div className="flex flex-col items-center gap-2">
+      <button
+        onClick={handleMint}
+        disabled={isPending || isConfirming || !address}
+        className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg disabled:opacity-50"
+      >
+        {isPending ? 'Confirming in Wallet...' : isConfirming ? 'Minting...' : isSuccess ? 'Minted!' : 'Mint NFT (0.1 ETH)'}
+      </button>
+      {error && <p className="text-red-500 text-sm">{(error as any).shortMessage || error.message}</p>}
+    </div>
   );
 }
