@@ -60,7 +60,7 @@ export default function MintPage() {
           <button onClick={handleMint} disabled={isPending}>
             {isPending ? 'Minting...' : 'Mint'}
           </button>
-          {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
+          {error && <p style={{ color: 'red' }}>Error: {(error as { shortMessage?: string }).shortMessage || 'An unexpected error occurred.'}</p>}
         </div>
       ) : (
         <p>Please connect your wallet to mint.</p>
