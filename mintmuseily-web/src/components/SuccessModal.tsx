@@ -9,16 +9,16 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    closeButtonRef.current?.focus();
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    if (isOpen) {
+      closeButtonRef.current?.focus();
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      window.addEventListener('keydown', handleEscape);
+      return () => window.removeEventListener('keydown', handleEscape);
+    }
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -29,11 +29,6 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
     >
       <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center border border-zinc-200 dark:border-zinc-800 transform transition-all animate-in fade-in zoom-in duration-300">
         <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4">
@@ -46,12 +41,7 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
           >
             <path
               strokeLinecap="round"
-<path
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  strokeWidth="2"
-  d="M5 13l4 4L19 7"
-></path>
+              strokeLinejoin="round"
               strokeWidth="2"
               d="M5 13l4 4L19 7"
             ></path>
