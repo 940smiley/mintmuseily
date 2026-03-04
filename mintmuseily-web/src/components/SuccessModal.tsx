@@ -29,6 +29,11 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
     >
       <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center border border-zinc-200 dark:border-zinc-800 transform transition-all animate-in fade-in zoom-in duration-300">
         <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4">
