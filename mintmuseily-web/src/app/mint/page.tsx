@@ -42,6 +42,8 @@ export default function MintPage() {
   useEffect(() => {
     if (isConfirmed) {
       setIsSuccessModalOpen(true);
+    } else {
+      setIsSuccessModalOpen(false);
     }
   }, [isConfirmed]);
 
