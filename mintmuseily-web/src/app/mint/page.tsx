@@ -81,7 +81,7 @@ export default function MintPage() {
                   type="number"
                   value={mintAmount}
                   min={1}
-                  onChange={(e) => setMintAmount(Number(e.target.value))}
+                onChange={(e) => setMintAmount(Math.max(1, Number(e.target.value)))}
                   disabled={isPending || isConfirming}
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition outline-none disabled:opacity-50"
                   placeholder="Enter amount"
