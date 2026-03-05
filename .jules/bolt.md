@@ -1,0 +1,3 @@
+## 2025-05-15 - Gas-Optimized Batch Minting
+**Learning:** Batching minting operations in Solidity significantly reduces the gas cost per NFT by amortizing the transaction overhead and minimizing SSTORE updates to the `tokenId` state variable. Using `unchecked` blocks for increments in Solidity 0.8.x provides a safe micro-optimization by bypassing redundant overflow checks for sequential IDs.
+**Action:** Implement `mint(uint256 amount)` overloads alongside a hyper-optimized `mint()` fast-path. Use local variable caching for state variables inside loops and `unchecked` for loop counters and safe increments.

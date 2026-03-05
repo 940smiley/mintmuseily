@@ -1,49 +1,44 @@
 // src/components/MintButton.tsx
-import { useAccount, useWriteContract } from 'wagmi';
-import { useEffect, useState } from 'react';
-import { parseEther } from 'viem';
+import { useWriteContract } from 'wagmi';
+import { useEffect, useState, useCallback } from 'react';
 
 export default function MintButton() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const { address } = useAccount();
   const { writeContract } = useWriteContract();
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => setIsSuccess(false), 3000)
+      const timer = setTimeout(() => setIsSuccess(false), 3000);
+      return () => clearTimeout(timer);
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
-  const handleMint = async () => {
+  const handleMint = useCallback(async () => {
     setIsLoading(true);
     try {
       await writeContract({
         address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-        abi: [], // Your contract ABI
+        abi: [
+          {
+            name: 'mint',
+            type: 'function',
+            inputs: [],
+            outputs: [],
+            stateMutability: 'nonpayable',
+          },
+        ] as const,
         functionName: 'mint',
-        args: [address],
-        value: parseEther('0.1'),
+        args: [],
       });
       setIsSuccess(true);
+    } catch (error) {
+      console.error('Minting failed:', error);
     } finally {
       setIsLoading(false);
-const handleMint = async () => {
-  setIsLoading(true);
-  try {
-    const mintPrice = await getMintPrice(); // Add function to fetch current price
-    await writeContract({
-      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-      abi: [], // Your contract ABI
-      functionName: 'mint',
-      args: [address],
-      value: mintPrice,
-    });
-    setIsSuccess(true);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    }
+  }, [writeContract]);
+
   return (
     <button
       onClick={handleMint}

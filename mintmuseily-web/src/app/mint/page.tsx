@@ -1,7 +1,7 @@
 "use client";
 import dynamic from 'next/dynamic';
 import { useWriteContract, useAccount } from 'wagmi';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 // Dynamically load the ConnectButton component from RainbowKit
 const ConnectButton = dynamic(() => import('@rainbow-me/rainbowkit').then(mod => mod.ConnectButton), { ssr: false });
@@ -13,8 +13,15 @@ if (!contractAddress) {
   throw new Error('Contract address is not defined in environment variables.');
 }
 
-// Replace with your actual contract ABI
+// Optimized contract ABI with both single and batch mint functions
 const contractAbi = [
+  {
+    name: 'mint',
+    type: 'function',
+    inputs: [],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
   {
     name: 'mint',
     type: 'function',
@@ -27,7 +34,7 @@ const contractAbi = [
     outputs: [],
     stateMutability: 'nonpayable',
   },
-];
+] as const;
 
 export default function MintPage() {
   const { address: walletAddress } = useAccount();
@@ -35,14 +42,26 @@ export default function MintPage() {
 
   const { writeContract, error, isPending } = useWriteContract();
 
-  const handleMint = () => {
-    writeContract({
-      address: contractAddress as `0x${string}`,
-      abi: contractAbi,
-      functionName: 'mint',
-      args: [mintAmount],
-    });
-  };
+  // Use useCallback to memoize handleMint and prevent unnecessary re-renders
+  const handleMint = useCallback(() => {
+    // Optimization: Use specialized single mint function if amount is 1,
+    // otherwise use the batch mint function.
+    if (mintAmount === 1) {
+      writeContract({
+        address: contractAddress as `0x${string}`,
+        abi: contractAbi,
+        functionName: 'mint',
+        args: [],
+      });
+    } else {
+      writeContract({
+        address: contractAddress as `0x${string}`,
+        abi: contractAbi,
+        functionName: 'mint',
+        args: [BigInt(mintAmount)],
+      });
+    }
+  }, [writeContract, mintAmount]);
 
   return (
     <div>

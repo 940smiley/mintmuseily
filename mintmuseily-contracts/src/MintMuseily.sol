@@ -9,8 +9,35 @@ contract MintMuseily is ERC721, Ownable {
 
     constructor() ERC721("MintMuseily", "MUSE") Ownable(msg.sender) {}
 
+    /**
+     * @dev Optimized single mint function.
+     * Uses unchecked block for tokenId increment to save gas.
+     */
     function mint() external {
-        _safeMint(msg.sender, tokenId);
-        tokenId++;
+        uint256 currentId = tokenId;
+        unchecked {
+            tokenId = currentId + 1;
+        }
+        _safeMint(msg.sender, currentId);
+    }
+
+    /**
+     * @dev Optimized batch mint function.
+     * Reduces gas per NFT by batching state updates and using unchecked increments.
+     * @param amount The number of NFTs to mint.
+     */
+    function mint(uint256 amount) external {
+        uint256 currentId = tokenId;
+        unchecked {
+            tokenId = currentId + amount;
+        }
+
+        for (uint256 i = 0; i < amount; ) {
+            _safeMint(msg.sender, currentId);
+            unchecked {
+                currentId++;
+                i++;
+            }
+        }
     }
 }
