@@ -1,0 +1,42 @@
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+  ▲ Next.js 13.5.11
+  - Local:        http://localhost:3000
+
+ ✓ Ready in 2.5s
+ ○ Compiling /mint/page ...
+ ⨯ ./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css.webpack[javascript/auto]!=!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[2]!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[3]!./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css
+Error: Cannot find module 'autoprefixer'
+Require stack:
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/config/blocks/css/plugins.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/config/blocks/css/index.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/config/index.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack-config.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/router-server.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/start-server.js
+    at Array.map (<anonymous>)
+Import trace for requested module:
+./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css.webpack[javascript/auto]!=!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[2]!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[3]!./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css
+./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css
+./src/components/Web3Provider.tsx
+ ⨯ ./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css.webpack[javascript/auto]!=!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[2]!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[3]!./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css
+Error: Cannot find module 'autoprefixer'
+Require stack:
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/config/blocks/css/plugins.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/config/blocks/css/index.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/config/index.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack-config.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/router-server.js
+- /app/mintmuseily-web/node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/start-server.js
+    at Array.map (<anonymous>)
+Import trace for requested module:
+./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css.webpack[javascript/auto]!=!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[2]!./node_modules/.pnpm/next@13.5.11_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[12].oneOf[12].use[3]!./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css
+./node_modules/.pnpm/@rainbow-me+rainbowkit@2.2.10_@tanstack+react-query@5.90.21_react@18.3.1__@types+react@_ef86f7f39d12b5586d0e413f4087c8e0/node_modules/@rainbow-me/rainbowkit/dist/index.css
+./src/components/Web3Provider.tsx
