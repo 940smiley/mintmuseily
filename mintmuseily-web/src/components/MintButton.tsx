@@ -11,44 +11,43 @@ export default function MintButton() {
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => setIsSuccess(false), 3000)
+      const timer = setTimeout(() => setIsSuccess(false), 3000);
+      return () => clearTimeout(timer);
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
   const handleMint = async () => {
     setIsLoading(true);
     try {
-      await writeContract({
+      writeContract({
         address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-        abi: [], // Your contract ABI
+        abi: [
+          {
+            name: 'mint',
+            type: 'function',
+            inputs: [{ name: 'address', type: 'address' }],
+            outputs: [],
+            stateMutability: 'payable',
+          },
+        ],
         functionName: 'mint',
         args: [address],
         value: parseEther('0.1'),
       });
       setIsSuccess(true);
+    } catch (error) {
+      console.error('Minting failed:', error);
     } finally {
       setIsLoading(false);
-const handleMint = async () => {
-  setIsLoading(true);
-  try {
-    const mintPrice = await getMintPrice(); // Add function to fetch current price
-    await writeContract({
-      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-      abi: [], // Your contract ABI
-      functionName: 'mint',
-      args: [address],
-      value: mintPrice,
-    });
-    setIsSuccess(true);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    }
+  };
+
   return (
     <button
       onClick={handleMint}
       disabled={isLoading}
-      className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg"
+      aria-busy={isLoading}
+      className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:opacity-90 transition-opacity focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
     >
       {isLoading ? 'Minting...' : isSuccess ? 'Success!' : 'Mint'}
     </button>
