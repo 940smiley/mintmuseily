@@ -10,7 +10,10 @@ contract MintMuseily is ERC721, Ownable {
     constructor() ERC721("MintMuseily", "MUSE") Ownable(msg.sender) {}
 
     function mint() external {
-        _safeMint(msg.sender, tokenId);
-        tokenId++;
+        uint256 currentId = tokenId;
+        unchecked {
+            tokenId = currentId + 1;
+        }
+        _safeMint(msg.sender, currentId);
     }
 }
