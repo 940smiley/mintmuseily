@@ -23,7 +23,23 @@ export default function MintButton() {
         abi: [], // Your contract ABI
         functionName: 'mint',
         args: [address],
-        value: parseEther('0.1'),
+const handleMint = async () => {
+  setIsLoading(true);
+  try {
+    await writeContract({
+      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+      abi: [], // Your contract ABI - NOTE: This must be populated.
+      functionName: 'mint',
+      args: [address],
+      value: parseEther('0.1'),
+    });
+    setIsSuccess(true);
+  } catch (error) {
+    console.error('Minting failed:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
       });
       setIsSuccess(true);
     } catch (error) {
