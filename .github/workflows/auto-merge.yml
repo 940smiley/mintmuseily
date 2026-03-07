@@ -1,0 +1,48 @@
+name: Auto Merge
+
+on:
+  pull_request:
+    types: [labeled, synchronize, opened, edited, ready_for_review, reopened]
+  check_suite:
+    types: [completed]
+  status: {}
+  workflow_dispatch:
+    inputs:
+      merge_all:
+        description: 'Merge all open PRs with passing CI'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.draft == false && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge for PR
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} --auto --squash
+
+      - name: Bulk Merge Open PRs
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.merge_all == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Fetch only open PRs that have passing CI checks
+          PR_NUMBERS=$(gh pr list --state open --json number,statusCheckRollup --jq '.[] | select(.statusCheckRollup.state == "SUCCESS") | .number')
+
+          if [ -z "$PR_NUMBERS" ]; then
+            echo "No open PRs with passing CI found."
+            exit 0
+          fi
+
+          for PR_NUM in $PR_NUMBERS; do
+            echo "Merging PR #$PR_NUM..."
+            gh pr merge $PR_NUM --squash || echo "Failed to merge PR #$PR_NUM"
+          done

@@ -1,0 +1,51 @@
+name: PR Autofix
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  autofix:
+    if: github.event.pull_request.draft == false && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Auto-detect and Fix
+        run: |
+          # Web / JS
+          find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
+            dir=$(dirname "$pkg")
+            cd "$dir"
+            [ -f "package-lock.json" ] && npm ci || npm install
+            npm run lint -- --fix || true
+            npm test || true
+            cd -
+          done
+
+          # Solidity
+          if [ -d "mintmuseily-contracts" ] || find . -name "foundry.toml" | grep -q .; then
+             forge fmt || true
+             forge build || true
+             forge test || true
+          fi
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: automated PR fixes and tests"

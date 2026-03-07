@@ -1,0 +1,83 @@
+name: Auto Lint Fix
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lint-fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Multi-language Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: foundry-rs/foundry-toolchain@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+      - name: Install Rust
+        run: rustup update stable && rustup component add rustfmt
+
+      - name: Fix JavaScript / TypeScript
+        run: |
+          find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
+            dir=$(dirname "$pkg")
+            echo "Linting JS/TS in $dir"
+            cd "$dir"
+            [ -f "package-lock.json" ] && npm ci || npm install
+            npm run lint -- --fix || true
+            npx prettier --write . || true
+            cd -
+          done
+
+      - name: Fix Solidity
+        run: |
+          if command -v forge >/dev/null; then
+            forge fmt || true
+          fi
+
+      - name: Fix Python
+        run: |
+          if find . -name "*.py" | grep -q .; then
+            pip install ruff black isort
+            ruff check --fix . || true
+            black . || true
+            isort . || true
+          fi
+
+      - name: Fix Go
+        run: |
+          if find . -name "*.go" | grep -q .; then
+            go fmt ./... || true
+          fi
+
+      - name: Fix Rust
+        run: |
+          if find . -name "Cargo.toml" | grep -q .; then
+            cargo fmt --all || true
+          fi
+
+      - name: Fix YAML and Markdown
+        run: |
+          npm install -g prettier markdownlint-cli
+          prettier --write "**/*.yml" "**/*.yaml" || true
+          markdownlint --fix "**/*.md" || true
+
+      - name: Commit and Push Fixes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: automated lint and format fixes"
+          commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
