@@ -70,7 +70,12 @@ export default function MintPage() {
               type="number"
               value={mintAmount}
               min={1}
-              onChange={(e) => setMintAmount(Number(e.target.value))}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (!isNaN(value) && value >= 1) {
+                  setMintAmount(Math.floor(value));
+                }
+              }}
               disabled={isPending || isConfirming}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 outline-none transition"
               aria-describedby={error ? "mint-error" : undefined}
