@@ -5,7 +5,6 @@ on:
     types: [labeled, synchronize, opened, edited, ready_for_review, reopened]
   check_suite:
     types: [completed]
-  status: {}
   workflow_dispatch:
     inputs:
       merge_all:
@@ -19,11 +18,14 @@ permissions:
 
 jobs:
   auto-merge:
-    if: github.event.pull_request.draft == false && github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Enable auto-merge for PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

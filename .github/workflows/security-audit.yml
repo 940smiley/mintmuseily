@@ -68,7 +68,11 @@ jobs:
           fi
 
       - name: Report Vulnerabilities
-        if: failure()
+        if: |
+          steps.web_audit.outcome == 'failure' ||
+          steps.python_audit.outcome == 'failure' ||
+          steps.go_audit.outcome == 'failure' ||
+          steps.rust_audit.outcome == 'failure'
         uses: actions/github-script@v7
         with:
           script: |

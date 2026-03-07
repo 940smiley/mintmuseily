@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  workflows: write
 
 jobs:
   lint-fix:
@@ -29,7 +30,10 @@ jobs:
         with:
           go-version: '1.21'
       - name: Install Rust
-        run: rustup update stable && rustup component add rustfmt
+        run: |
+          if find . -name "Cargo.toml" -not -path "*/node_modules/*" | grep -q .; then
+            rustup update stable && rustup component add rustfmt
+          fi
 
       - name: Fix JavaScript / TypeScript
         run: |
@@ -37,7 +41,7 @@ jobs:
             dir=$(dirname "$pkg")
             echo "Linting JS/TS in $dir"
             cd "$dir"
-            [ -f "package-lock.json" ] && npm ci || npm install
+            npm install || true
             npm run lint -- --fix || true
             npx prettier --write . || true
             cd -
@@ -45,7 +49,7 @@ jobs:
 
       - name: Fix Solidity
         run: |
-          if command -v forge >/dev/null; then
+          if find . -name "foundry.toml" | grep -q . || [ -d "contracts" ]; then
             forge fmt || true
           fi
 
@@ -74,7 +78,7 @@ jobs:
         run: |
           npm install -g prettier markdownlint-cli
           prettier --write "**/*.yml" "**/*.yaml" || true
-          markdownlint --fix "**/*.md" || true
+          markdownlint --fix --ignore "**/node_modules/**" "**/*.md" || true
 
       - name: Commit and Push Fixes
         uses: stefanzweifel/git-auto-commit-action@v5
