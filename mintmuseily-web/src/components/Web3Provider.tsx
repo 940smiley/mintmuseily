@@ -6,7 +6,15 @@ import { sepolia } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!;
+const config = getDefaultConfig({
+  appName: 'MintMuseily',
+  projectId,
+  chains: [sepolia],
+  transports: {
+    [sepolia.id]: http(SEPOLIA_RPC),
+  },
+  ssr: typeof window !== 'undefined', // Conditional SSR
+});
 const SEPOLIA_RPC = process.env.NEXT_PUBLIC_RPC_URL!;
 
 const config = getDefaultConfig({
