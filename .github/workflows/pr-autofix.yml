@@ -33,13 +33,12 @@ jobs:
       - name: Auto-detect and Fix
         run: |
           # Node.js / Web
+          # Web / JS
           find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
             dir=$(dirname "$pkg")
-            cd "$dir"
-            npm install || true
-            npm run lint -- --fix || true
-            npm test || true
-            cd -
+            if [ -d "$dir" ]; then
+              (cd "$dir" && [ -f "package-lock.json" ] && npm ci || npm install && npm run lint -- --fix || true && npm test || true)
+            fi
           done
 
           # Solidity
