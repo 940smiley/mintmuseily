@@ -26,10 +26,9 @@ jobs:
           # Web / JS
           find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
             dir=$(dirname "$pkg")
-            cd "$dir"
-            npm install
-            npm run lint -- --fix || true
-            cd -
+            if [ -d "$dir" ]; then
+              (cd "$dir" && npm install && npm run lint -- --fix || true)
+            fi
           done
 
           # Solidity
