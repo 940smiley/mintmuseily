@@ -25,7 +25,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://*.walletconnect.com https://*.walletconnect.org https://*.alchemy.com https://*.infura.io; img-src 'self' data: https://*.walletconnect.com https://*.walletconnect.org; style-src 'self' 'unsafe-inline';",
+            value: "default-src 'self'; script-src 'self'; connect-src 'self'     img-src 'self' data:   style-src 'self';",
           },
         ],
       },
