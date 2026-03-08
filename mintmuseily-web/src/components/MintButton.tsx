@@ -23,7 +23,7 @@ export default function MintButton() {
         abi: [], // Your contract ABI
         functionName: 'mint',
         args: [address],
-        value: parseEther('0.1'),
+address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
       });
       setIsSuccess(true);
     } catch (error) {
