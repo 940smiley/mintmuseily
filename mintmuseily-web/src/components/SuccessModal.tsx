@@ -30,6 +30,7 @@ type SuccessModalProps = {
         role="dialog"
         aria-modal="true"
         aria-labelledby="success-title"
+        onClick={onClose}
       >
         <div className="bg-white p-6 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
           <h2 id="success-title" className="text-2xl mb-4 text-black">Success!</h2>
