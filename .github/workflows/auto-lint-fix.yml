@@ -40,11 +40,9 @@ jobs:
           find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
             dir=$(dirname "$pkg")
             echo "Linting JS/TS in $dir"
-            cd "$dir"
-            npm install || true
-            npm run lint -- --fix || true
-            npx prettier --write . || true
-            cd -
+            if [ -d "$dir" ]; then
+              (cd "$dir" && [ -f "package-lock.json" ] && npm ci || npm install && npm run lint -- --fix || true && npx prettier --write . || true)
+            fi
           done
 
       - name: Fix Solidity
