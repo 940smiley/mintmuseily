@@ -1,0 +1,38 @@
+name: Dependabot Helper
+
+on:
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fix Compatibility Issues
+        run: |
+          find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
+            dir=$(dirname "$pkg")
+            if [ -d "$dir" ]; then
+              (cd "$dir" && npm install && npm run lint -- --fix || true)
+            fi
+          done
+
+      - name: Commit fixes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: fix compatibility for dependabot update"

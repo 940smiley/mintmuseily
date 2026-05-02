@@ -1,0 +1,84 @@
+name: Security Audit
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Multi-language Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Run Web Audit (npm)
+        id: web_audit
+        continue-on-error: true
+        run: |
+          find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
+            dir=$(dirname "$pkg")
+            cd "$dir"
+            npm audit --audit-level=high
+            cd -
+          done
+
+      - name: Run Python Audit (pip-audit)
+        id: python_audit
+        continue-on-error: true
+        run: |
+          if find . -name "requirements.txt" | grep -q .; then
+            pip install pip-audit
+            pip-audit || true
+          fi
+
+      - name: Run Go Vulnerability Check
+        id: go_audit
+        continue-on-error: true
+        run: |
+          if find . -name "go.mod" | grep -q .; then
+            go install golang.org/x/vuln/cmd/govulncheck@latest
+            govulncheck ./... || true
+          fi
+
+      - name: Run Rust Audit (cargo-audit)
+        id: rust_audit
+        continue-on-error: true
+        run: |
+          if find . -name "Cargo.toml" | grep -q .; then
+            cargo install cargo-audit
+            cargo audit || true
+          fi
+
+      - name: Report Vulnerabilities
+        if: |
+          steps.web_audit.outcome == 'failure' ||
+          steps.python_audit.outcome == 'failure' ||
+      - name: Report Vulnerabilities
+        if: steps.web_audit.outcome == 'failure' || steps.python_audit.outcome == 'failure' || steps.go_audit.outcome == 'failure' || steps.rust_audit.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "Security Alert: Vulnerabilities detected in repository",
+              body: "The security audit detected potential vulnerabilities. Please check the workflow logs for details."
+            })

@@ -1,0 +1,45 @@
+name: Repo Self Heal
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  self-heal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Global Formatting and Cleanup
+        run: |
+          # Web / JS
+          find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
+            dir=$(dirname "$pkg")
+            if [ -d "$dir" ]; then
+              (cd "$dir" && npm install && npm run lint -- --fix || true)
+            fi
+          done
+
+          # Solidity
+          if command -v forge >/dev/null; then
+            forge fmt || true
+          fi
+
+          # Whitespace and basic cleanup
+          find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.py" -o -name "*.go" \) -exec sed -i 's/[[:space:]]*$//' {} +
+
+      - name: Commit and Push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: daily repository maintenance and self-healing"

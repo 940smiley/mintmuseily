@@ -1,0 +1,55 @@
+name: Repo Health Report
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate Detailed Health Report
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "### 📊 Repository Health Report" >> $GITHUB_STEP_SUMMARY
+          echo "Date: $(date)" >> $GITHUB_STEP_SUMMARY
+
+          echo "#### 🔍 Summary of Checks" >> $GITHUB_STEP_SUMMARY
+
+          # Web / JS
+          echo "##### 🌐 Node.js Projects" >> $GITHUB_STEP_SUMMARY
+          find . -name "package.json" -not -path "*/node_modules/*" | while read pkg; do
+            dir=$(dirname "$pkg")
+            echo "<details><summary>Project: $dir</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cd "$dir"
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            npm outdated || echo "Check failed or no outdated packages" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "</details>" >> $GITHUB_STEP_SUMMARY
+            cd -
+          done
+
+          # Open PRs
+          echo "##### 📬 Open Pull Requests" >> $GITHUB_STEP_SUMMARY
+          echo "| # | Title | Author | CI Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|-------|--------|-----------|" >> $GITHUB_STEP_SUMMARY
+          gh pr list --state open --json number,title,author,statusCheckRollup --jq '.[] | "| \(.number) | \(.title) | \(.author.login) | \(.statusCheckRollup.state // "N/A") |"' >> $GITHUB_STEP_SUMMARY || echo "No open PRs" >> $GITHUB_STEP_SUMMARY
+
+          # Security / Vulnerabilities (basic check)
+          echo "##### 🛡️ Security Pulse" >> $GITHUB_STEP_SUMMARY
+          if npm audit --audit-level=high > /dev/null 2>&1; then
+            echo "✅ No high-level vulnerabilities found in root." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ High-level vulnerabilities detected!" >> $GITHUB_STEP_SUMMARY
+          fi
