@@ -1,0 +1,119 @@
+################################################################################
+# .AGENTS FILE
+# MintMuseily repository guidance
+# Repository: 940smiley/mintmuseily
+# Updated: 2026-09-29
+
+## 1. Project overview
+Project: MintMuseily
+Description: Web3 dApp for music generation with NFT minting
+Repo URL: https://github.com/940smiley/mintmuseily
+Status: MVP / prototype stage
+Main tech: Foundry + Solidity + Next.js + React + TypeScript + wagmi + RainbowKit
+
+## 2. Language composition
+Languages by code size:
+- Solidity: dominant codebase; used for NFT contract logic
+- Python: supporting script/tooling
+- TypeScript: web app code and config typing
+- JavaScript: config and tool files
+- CSS: utility/layout styling
+
+## 3. Repository structure
+- mintmuseily-contracts/
+  - src/: contract source files
+  - test/: contract tests
+  - script/: deployment helpers
+- mintmuseily-web/
+  - src/app/: app routes and pages
+  - src/components/: UI and web3 components
+  - public/: static assets
+- forge/
+  - Foundry tooling and library config
+- .github/, .vscode/
+  - support and editor config
+
+## 4. Current implementation status
+Completed:
+- ERC721 NFT contract with single and batch mint functions
+- Wallet connection and wallet UI
+- Sepolia testnet integration
+- Mint UX with success modal
+- Foundry-based contract project structure
+
+Still missing or incomplete:
+- Music generation workflow
+- Metadata/IPFS pipeline
+- Strong production validation
+- Admin roles and access controls
+- Deployment documentation
+- Automated CI and test coverage
+
+## 5. Open issues / PRs
+Open Issues: 13
+Open dependency PRs: multiple Dependabot updates
+Primary upgrade areas:
+- Next.js major version review
+- wagmi/viem compatibility review
+- eslint / supporting package updates
+- security-related dependency bumps
+
+## 6. Immediate tasks
+Priority 1
+- [ ] Investigate open issues and categorize them
+- [ ] Implement actual music generation flow
+- [ ] Add metadata/IPFS support for NFTs
+- [ ] Expand contract test coverage
+- [ ] Improve error handling and UX
+
+Priority 2
+- [ ] Review and validate dependency updates before merge
+- [ ] Add environment/deployment docs
+- [ ] Add admin/owner controls to contracts
+- [ ] Set up CI checks for lint/build/test
+
+Priority 3
+- [ ] Add dashboard/history for user minting
+- [ ] Add transaction receipt and explorer links
+- [ ] Improve UI accessibility and polish
+- [ ] Add mainnet readiness checklist
+
+## 7. Recommended upgrades and improvements
+Smart contracts
+- Add pausable control and access control roles
+- Add royalty support (ERC2981)
+- Add tokenURI/baseURI support for metadata
+- Add events for better mint tracking
+- Review upgrade path for future contract improvements
+
+Frontend
+- Improve error boundaries and state handling
+- Add loading/spinner and success states where needed
+- Add transaction hashes and Etherscan links
+- Review wallet persistence and retry logic
+- Improve onboarding UX for first-time users
+
+Infrastructure
+- Add GitHub Actions CI
+- Add lint/test/build verification
+- Add contract static analysis (Slither/MythX)
+- Add staging/testnet deploy flow
+- Create docs for environment variables and setup
+
+## 8. Standards for agents and bots
+- Keep code secure, well-documented, and testable
+- Log all work to agents.log
+- Update .agents when task status changes
+- Keep commits small and focused
+- Validate contract and UI changes before finalizing
+- Prefer minimal, deterministic changes
+
+## 9. Mandatory logging requirements
+All agent activity must be recorded in agents.log using the format:
+[YYYY-MM-DDTHH:MM:SSZ] [AGENT_NAME] [ACTION] [DETAILS]
+
+## 10. Notes
+The repo is in a promising MVP state but still lacks the major product-level feature: the actual music generation + metadata lifecycle. The next meaningful progress should focus on product completeness, testing, and deployment readiness rather than cosmetic polish alone.
+################################################################################
+# END OF .AGENTS FILE
+################################################################################
